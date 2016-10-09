@@ -4,8 +4,27 @@
     <meta charset="UTF-8">
     <title>UM Reminders</title>
   </head>
-  <body>
-  
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular.min.js" type="text/javascript"></script>
+  <body ng-app="umr">
+    <div ng-controller="umrController">
+      <!-- Maybe change from patient-centric to appointment-centric -->
+      <div class="add-visits">
+        <form novalidate class="patient-form">
+          Full Name: <input type="text" ng-model="patient.name" />
+          Phone Number: <input type="tel" ng-model="patient.number" />
+          Type of Appointment: <input type="text" ng-model="patient.appointment" />
+          Date: <input type="date" ng-model="patient.appointment" />
+          <input type="submit" ng-click="add(patient)" value="Add" />
+        </form>
+        <br/>
+        <pre ng-bind="patient">patient =  {{patient | json}} </pre>
+      </div>
+      <div class="view-visits">
+
+      </div>
+      <div class="text-visits">
+      </div>
+    </div>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular.min.js" type="text/javascript"></script>
+    <script src="js/index.js"></script>
   </body>
 </html>

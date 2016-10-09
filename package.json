@@ -23,6 +23,7 @@
     "url": "https://github.com/uklineale/um_reminders/issues"
   },
   "dependencies": {
-    "express": "~4.14.0"
+    "express": "~4.14.0",
+    "nodemon": "~1.11.0"
   }
 }
