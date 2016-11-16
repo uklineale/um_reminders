@@ -82,8 +82,13 @@ app.post('/api/visits', function (req, res){
  * Sends all the csvs to Angular
  */
 app.get('/api/uploads', function(req, res){
-  res.json(readdir(uploadDir));
+  console.log("Uploads");
+  fs.readdir(uploadDir, function(err, data){
+    console.log(data);
+    res.json(data);
+  });
 });
+
 
 
 app.post('/api/send', function (req, res){

@@ -9,12 +9,14 @@ angular.module('umr', [])
       $http.post('http://localhost:3000/api/send', message);
     }
     $scope.peek = function() {
-      // $http.get('http://localhost:3000/api/peek')
-      //   .success(function(data, status){
-      //     $scope.visits = data;
-      //   })
-      //   .error(function(data, status){
-      //     alert('Error');
-      //   });
+      $http.get('http://localhost:3000/api/uploads')
+        .success(function(data, status){
+          $scope.visits = data;
+        })
+        .error(function(data, status){
+          alert('Error in peek() index.js');
+        });
     }
+
+    $scope.peek()
   }]);

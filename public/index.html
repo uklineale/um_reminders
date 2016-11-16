@@ -38,8 +38,9 @@
       </div>
       <div class="text-visits">
         <form novalidate class="message-form">
-            Message: <input type="text" ng-model="message" />
-            <input type="submit" ng-click="send(message)" value="Send Messages" />
+            Message (English): <input type="text" ng-model="msg.messageEng" />
+            Message (Spanish): <input type="text" ng-model="msg.messageSpan" />
+            <input type="submit" ng-click="send(msg)" value="Send Messages" />
         </form>
       </div>
     </div>
