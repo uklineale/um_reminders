@@ -32,8 +32,8 @@
         <input id="upload-input" type="file" name="uploads[]" multiple="multiple" accept=".csv"></br>
       </div>
       <div class="view-visits">
-        <ul>
-          <li ng-repeat="visit in visits.results"> {{visit || json}} </li>
+        <ul ng-repeat="visit in visits.results">
+          <li ng-repeat="visit in visits.results"> {{visit}} </li>
         </ul>
       </div>
       <div class="text-visits">
