@@ -95,6 +95,8 @@ app.post('/api/send', function (req, res){
   var messageEng  = req.body.messageEng;
   var messageSpan = req.body.messageSpan;
 
+  console.log(messageEng);
+  console.log(messageSpan);
   //Send twilio
 });
 

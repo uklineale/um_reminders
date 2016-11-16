@@ -8,7 +8,7 @@ angular.module('umr', [])
     $scope.send = function(message) {
       $http.post('http://localhost:3000/api/send', message);
     }
-    $scope.peek = function() {
+    $scope.uploads = function() {
       $http.get('http://localhost:3000/api/uploads')
         .success(function(data, status){
           $scope.visits = data;
@@ -18,5 +18,5 @@ angular.module('umr', [])
         });
     }
 
-    $scope.peek()
+    $scope.uploads()
   }]);
