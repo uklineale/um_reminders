@@ -1,6 +1,6 @@
 angular.module('umr', [])
   .controller('umrController', ['$http', '$scope', function($http, $scope) {
-    $scope.visits = [];
+    $scope.visits = [1,2,3,4,5,6];
 
     $scope.add = function(visit) {
       $http.post('http://localhost:3000/api/visit', visit);
@@ -12,9 +12,10 @@ angular.module('umr', [])
       $http.get('http://localhost:3000/api/uploads')
         .success(function(data, status){
           $scope.visits = data;
+          console.log(data);
         })
         .error(function(data, status){
-          alert('Error in peek() index.js');
+          alert('Error in uploads() index.js');
         });
     }
 

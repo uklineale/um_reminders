@@ -32,8 +32,8 @@
         <input id="upload-input" type="file" name="uploads[]" multiple="multiple" accept=".csv"></br>
       </div>
       <div class="view-visits">
-        <ul ng-repeat="visit in visits.results">
-          <li ng-repeat="visit in visits.results"> {{visit}} </li>
+        <ul>
+          <li ng-repeat="visit in visits"> {{visit}} </li>
         </ul>
       </div>
       <div class="text-visits">
@@ -44,6 +44,8 @@
         </form>
       </div>
     </div>
+
+    <p>Hi</p>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js" type="text/javascript"></script>
     <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>

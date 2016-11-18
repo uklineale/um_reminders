@@ -1,45 +1,13 @@
 var express = require('express');
 var path = require('path');
 var bodyParser = require('body-parser');
-var mongo = require('mongodb');
-var csv = require('csv');
 var fs = require('fs');
 var formidable = require('formidable');
+var parse = require('csv-parse');
 
-var Server = mongo.Server;
-var Db = mongo.Db;
+
 
 var app = express();
-
-// Mongo config
-var server = new Server('localhost', 27017, {auto_reconnect:true});
-var db = new Db('umr', server);
-var init = [
-  {
-    fname: "Latoya",
-    lname: "Lewis",
-    phone: "9194002343",
-    date : "2016-10-25T09:00"
-  }
-];
-
-db.open(function(err, db) {
-  if (err) {
-    console.log(err);
-  } else {
-    db.collection('visits', {strict:true}, function(err, collection){
-      if (err){
-        console.log(err);
-      } else{
-        collection.insert( init, {safe:true}, function(err,result){
-          if (err){
-            console.log(err);
-          }
-        });
-      }
-    });
-  }
-});
 
 // Node config
 app.use(express.static('public'));
@@ -50,20 +18,33 @@ app.use(bodyParser.urlencoded({extended : true}));
 const uploadDir = './uploads';
 
 
+
 app.post('/api/visits', function (req, res){
+  // var targetSet = "";
   var form = new formidable.IncomingForm();
   form.uploadDir = path.join(__dirname, '/uploads');
 
   // every time a file has been uploaded successfully,
   // rename it to it's orignal name
   form.on('file', function(field, file) {
-    console.log(file.name);
+    //targetSet = file.name;
     fs.rename(file.path, path.join(form.uploadDir, file.name));
+    fs.createReadStream(file.path)
+      .pipe(parse())
+      .on('data', function(csvrow) {
+        console.log(csvrow);
+      })
+      .on('end', function(){
+        console.log("Done parsing");
+      })
+      .on('error', function(err){
+        console.log('Error 14002');
+      });
   });
 
   // log any errors that occur
   form.on('error', function(err) {
-    console.log('An error has occured: \n' + err);
+    console.log('Error 17002: \n' + err);
   });
 
   // once all the files have been uploaded, send a response to the client
@@ -73,9 +54,6 @@ app.post('/api/visits', function (req, res){
 
   // parse the incoming request containing the form data
   form.parse(req);
-  // db.collection('visits', {strict:true}, function(err, collection){
-  //
-  // });
 });
 
 /* TODO: Delete functionality
@@ -88,6 +66,7 @@ app.get('/api/uploads', function(req, res){
     res.json(data);
   });
 });
+
 
 
 
