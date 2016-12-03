@@ -3,34 +3,53 @@
   <head>
     <meta charset="UTF-8">
     <title>UM Reminders</title>
+    <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link href="css/styles.css" rel="stylesheet">
   </head>
   <body ng-app="umr">
     <div ng-controller="umrController" ng-init="peek()">
       <!-- Maybe change from patient-centric to appointment-centric -->
       <div class="add-visits">
-        <form novalidate class="visit-form">
-          Full Name: <input type="text" ng-model="visit.name" />
-          Phone Number: <input type="tel" ng-model="visit.number" />
-          Type of Appointment: <input type="text" ng-model="visit.type" />
-          Date: <input type="date" ng-model="visit.date" />
-          <input type="submit" ng-click="add(visit)" value="Add" />
-        </form>
-        <br/>
-        <pre>visit =  {{visit | json}} </pre>
+        <div class="container">
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="panel panel-default">
+                <div class="panel-body">
+                  <span class="glyphicon glyphicon-cloud-upload"></span>
+                  <h2>File Uploader</h2>
+                  <h4>coligo.io</h4>
+                  <div class="progress">
+                    <div class="progress-bar" role="progressbar"></div>
+                  </div>
+                  <button class="btn btn-lg upload-btn" type="button">Upload File</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <input id="upload-input" type="file" name="uploads[]" multiple="multiple" accept=".csv"></br>
       </div>
       <div class="view-visits">
         <ul>
-          <li ng-repeat="visit in visits.results"> {{visit || json}} </li>
+          <li ng-repeat="visit in visits"> {{visit}} </li>
         </ul>
       </div>
       <div class="text-visits">
         <form novalidate class="message-form">
-            Message: <input type="text" ng-model="message" />
-            <input type="submit" ng-click="send(message)" value="Send Messages" />
+            Message (English): <input type="text" ng-model="msg.messageEng" />
+            Message (Spanish): <input type="text" ng-model="msg.messageSpan" />
+            <input type="submit" ng-click="send(msg)" value="Send Messages" />
         </form>
       </div>
     </div>
+
+    <p>Hi</p>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js" type="text/javascript"></script>
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="js/upload.js"></script>
     <script src="js/index.js"></script>
   </body>
 </html>

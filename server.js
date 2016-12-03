@@ -1,85 +1,83 @@
 var express = require('express');
 var path = require('path');
 var bodyParser = require('body-parser');
-var mongo = require('mongodb');
-var csv = require('csv');
+var fs = require('fs');
+var formidable = require('formidable');
+var parse = require('csv-parse');
 
-var Server = mongo.Server;
-var Db = mongo.Db;
+
 
 var app = express();
-
-//Mongo config
-var server = new Server('localhost', 27017, {auto_reconnect:true});
-var db = new Db('umr', server);
-var init = [
-  {
-    fname: "Latoya",
-    lname: "Lewis",
-    phone: "9194002343",
-    date : "2016-10-25T09:00"
-  }
-];
-
-db.open(function(err, db) {
-  if (err) {
-    console.log(err);
-  } else {
-    db.collection('visits', {strict:true}, function(err, collection){
-      if (err){
-        console.log(err);
-      } else{
-        collection.insert( init, {safe:true}, function(err,result){
-          if (err){
-            console.log(err);
-          }
-        });
-      }
-    });
-  }
-});
 
 // Node config
 app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended : true}));
 
+// App config
+const uploadDir = './uploads';
+
+
+
 app.post('/api/visits', function (req, res){
-  var csv_string = req.body.csv_string;
-  console.log(csv_string);
+  // var targetSet = "";
+  var form = new formidable.IncomingForm();
+  form.uploadDir = path.join(__dirname, '/uploads');
 
-  var fields = csv_string.split(',');
-
-  var visit = [
-    {
-      "lname" : fields[0],
-      "fname" : fields[1],
-      "number": fields[2],
-      "date"  : fields[3]
-    }
-  ]
-
-  db.collection('visits', {strict:true}, function(err, collection){
-    if (err){
-      console.log(err);
-    } else{
-      collection.insert( visit, {safe:true}, function(err, result){
-        if (err){ console.log(err); }
+  // every time a file has been uploaded successfully,
+  // rename it to it's orignal name
+  form.on('file', function(field, file) {
+    //targetSet = file.name;
+    fs.rename(file.path, path.join(form.uploadDir, file.name));
+    fs.createReadStream(file.path)
+      .pipe(parse())
+      .on('data', function(csvrow) {
+        console.log(csvrow);
+      })
+      .on('end', function(){
+        console.log("Done parsing");
+      })
+      .on('error', function(err){
+        console.log('Error 14002');
       });
-    }
   });
 
-  res.send("Success: "+csv_string);
-  console.log('Added a visit: ' + name + number + date);
+  // log any errors that occur
+  form.on('error', function(err) {
+    console.log('Error 17002: \n' + err);
+  });
+
+  // once all the files have been uploaded, send a response to the client
+  form.on('end', function() {
+    res.end('success');
+  });
+
+  // parse the incoming request containing the form data
+  form.parse(req);
+});
+
+/* TODO: Delete functionality
+ * Sends all the csvs to Angular
+ */
+app.get('/api/uploads', function(req, res){
+  console.log("Uploads");
+  fs.readdir(uploadDir, function(err, data){
+    console.log(data);
+    res.json(data);
+  });
 });
 
 
 
-app.post('/api/send', function (req, res){
-  var message = req.body.message;
 
+app.post('/api/send', function (req, res){
+  var messageEng  = req.body.messageEng;
+  var messageSpan = req.body.messageSpan;
+
+  console.log(messageEng);
+  console.log(messageSpan);
   //Send twilio
-})
+});
 
 app.listen(3000, function () {
     console.log('Server running: port 3000');
