@@ -19,5 +19,5 @@ angular.module('umr', [])
         });
     }
 
-    $scope.uploads()
+    //$scope.uploads()
   }]);
