@@ -3,7 +3,7 @@ angular.module('umr', [])
     $scope.visits = [1,2,3,4,5,6];
 
     $scope.add = function(visit) {
-      $http.post('http://localhost:3000/api/visit', visit);
+      $http.post('http://localhost:3000/api/visits', visit);
     }
     $scope.send = function(message) {
       $http.post('http://localhost:3000/api/send', message);
@@ -19,5 +19,5 @@ angular.module('umr', [])
         });
     }
 
-    //$scope.uploads()
+    $scope.uploads()
   }]);

@@ -20,39 +20,39 @@ const uploadDir = './uploads';
 
 
 app.post('/api/visits', function (req, res){
-  // var targetSet = "";
+
   var form = new formidable.IncomingForm();
-  form.uploadDir = path.join(__dirname, '/uploads');
+  form.uploadDir = path.join(__dirname, 'uploads');
 
   // every time a file has been uploaded successfully,
   // rename it to it's orignal name
   form.on('file', function(field, file) {
-    //targetSet = file.name;
-    fs.rename(file.path, path.join(form.uploadDir, file.name));
-    fs.createReadStream(file.path)
-      .pipe(parse())
-      .on('data', function(csvrow) {
-        console.log(csvrow);
-      })
-      .on('end', function(){
-        console.log("Done parsing");
-      })
-      .on('error', function(err){
-        console.log('Error 14002');
+      fs.rename(file.path, path.join(form.uploadDir, file.name), function(err){
+          if (err) throw err;
+          fs.createReadStream(file.name)
+            .pipe(parse())
+            .on('data', function(csvrow) {
+              console.log(csvrow);
+            })
+            .on('end', function(){
+              console.log("Done parsing");
+            })
+            .on('error', function(err){
+              if (err) throw err;
+            });
       });
   });
 
-  // log any errors that occur
+  // log any errorrs that occur
   form.on('error', function(err) {
-    console.log('Error 17002: \n' + err);
+    if (err) throw err;
   });
 
-  // once all the files have been uploaded, send a response to the client
+  //Send back to client
   form.on('end', function() {
     res.end('success');
   });
 
-  // parse the incoming request containing the form data
   form.parse(req);
 });
 
