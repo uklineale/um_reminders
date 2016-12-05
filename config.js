@@ -1,3 +1,5 @@
+require('dotenv').load();
+
 var config = {};
 
 config.twilioAccountSid = process.env.TWILIO_ACCOUNT_SID;

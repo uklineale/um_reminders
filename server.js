@@ -9,7 +9,6 @@ var twilio = require('twilio');
 
 
 var app = express();
-
 // Node config
 app.use(express.static('public'));
 app.use(bodyParser.json());
@@ -28,7 +27,7 @@ function sendMessage(fname, lname, number, date){
     body: "This is the first message you've sent from server"
   }
 
-  client.sendMessage(options, function(err, response){
+  twilioClient.sendMessage(options, function(err, response){
     if (err){
       console.error(err);
     } else {
