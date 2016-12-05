@@ -1,85 +1,103 @@
 var express = require('express');
 var path = require('path');
 var bodyParser = require('body-parser');
-var mongo = require('mongodb');
-var csv = require('csv');
+var fs = require('fs');
+var formidable = require('formidable');
+var parse = require('csv-parse');
+var config = require('./config');
+var twilio = require('twilio');
 
-var Server = mongo.Server;
-var Db = mongo.Db;
 
 var app = express();
-
-//Mongo config
-var server = new Server('localhost', 27017, {auto_reconnect:true});
-var db = new Db('umr', server);
-var init = [
-  {
-    fname: "Latoya",
-    lname: "Lewis",
-    phone: "9194002343",
-    date : "2016-10-25T09:00"
-  }
-];
-
-db.open(function(err, db) {
-  if (err) {
-    console.log(err);
-  } else {
-    db.collection('visits', {strict:true}, function(err, collection){
-      if (err){
-        console.log(err);
-      } else{
-        collection.insert( init, {safe:true}, function(err,result){
-          if (err){
-            console.log(err);
-          }
-        });
-      }
-    });
-  }
-});
-
 // Node config
 app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended : true}));
 
-app.post('/api/visits', function (req, res){
-  var csv_string = req.body.csv_string;
-  console.log(csv_string);
+// App config
+const uploadDir = 'uploads';
+console.log('Account SID: ' + config.twilioAccountSid);
+console.log('Auth Token:  ' + config.twilioAuthToken); 
+const twilioClient = new twilio.RestClient(config.twilioAccountSid,
+  config.twilioAuthToken);
+function sendMessage(fname, lname, number, date){
+  var options = {
+    to: "+1" + number,
+    from: config.twilioPhoneNumber,
+    body: "This is the first message you've sent from server"
+  }
 
-  var fields = csv_string.split(',');
-
-  var visit = [
-    {
-      "lname" : fields[0],
-      "fname" : fields[1],
-      "number": fields[2],
-      "date"  : fields[3]
-    }
-  ]
-
-  db.collection('visits', {strict:true}, function(err, collection){
+  twilioClient.sendMessage(options, function(err, response){
     if (err){
-      console.log(err);
-    } else{
-      collection.insert( visit, {safe:true}, function(err, result){
-        if (err){ console.log(err); }
-      });
+      console.error(err);
+    } else {
+      var masked = number.substr(0, number.length - 5);
+      masked += '*****';
+      console.log('Message sent to '+masked);
     }
   });
+}
 
-  res.send("Success: "+csv_string);
-  console.log('Added a visit: ' + name + number + date);
+app.post('/api/visits', function (req, res){
+
+  var form = new formidable.IncomingForm();
+  form.uploadDir = path.join(__dirname, uploadDir);
+
+  // every time a file has been uploaded successfully,
+  // rename it to it's orignal name
+  form.on('file', function(field, file) {
+    console.log("Filepath: "+file.path)
+    var filepath = path.join(form.uploadDir, file.name);
+    fs.rename(file.path, filepath);
+
+    fs.createReadStream(filepath)
+      .pipe(parse())
+      .on('data', function(csvrow) {
+        sendMessage(csvrow[0], csvrow[1], csvrow[2], csvrow[3]);
+      })
+      .on('end', function(){
+        console.log("Done parsing");
+      })
+      .on('error', function(err){
+        console.log("Err: "+err);
+      });
+  });
+
+  // log any errorrs that occur
+  form.on('error', function(err) {
+    if (err) throw err;
+  });
+
+  //Send back to client
+  form.on('end', function() {
+    res.end('success');
+  });
+
+  form.parse(req);
+});
+
+/* TODO: Delete functionality
+ * Sends all the csvs to Angular
+ */
+app.get('/api/uploads', function(req, res){
+  console.log("Uploads");
+  fs.readdir(uploadDir, function(err, data){
+    console.log(data);
+    res.json(data);
+  });
 });
 
 
 
-app.post('/api/send', function (req, res){
-  var message = req.body.message;
 
+app.post('/api/send', function (req, res){
+  var messageEng  = req.body.messageEng;
+  var messageSpan = req.body.messageSpan;
+
+  console.log(messageEng);
+  console.log(messageSpan);
   //Send twilio
-})
+});
 
 app.listen(3000, function () {
     console.log('Server running: port 3000');
