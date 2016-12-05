@@ -4,7 +4,8 @@ var bodyParser = require('body-parser');
 var fs = require('fs');
 var formidable = require('formidable');
 var parse = require('csv-parse');
-
+var config = require('./config');
+var twilio = require('twilio');
 
 
 var app = express();
@@ -16,8 +17,27 @@ app.use(bodyParser.urlencoded({extended : true}));
 
 // App config
 const uploadDir = 'uploads';
+console.log('Account SID: ' + config.twilioAccountSid);
+console.log('Auth Token:  ' + config.twilioAuthToken); 
+const twilioClient = new twilio.RestClient(config.twilioAccountSid,
+  config.twilioAuthToken);
+function sendMessage(fname, lname, number, date){
+  var options = {
+    to: "+1" + number,
+    from: config.twilioPhoneNumber,
+    body: "This is the first message you've sent from server"
+  }
 
-
+  client.sendMessage(options, function(err, response){
+    if (err){
+      console.error(err);
+    } else {
+      var masked = number.substr(0, number.length - 5);
+      masked += '*****';
+      console.log('Message sent to '+masked);
+    }
+  });
+}
 
 app.post('/api/visits', function (req, res){
 
@@ -34,7 +54,7 @@ app.post('/api/visits', function (req, res){
     fs.createReadStream(filepath)
       .pipe(parse())
       .on('data', function(csvrow) {
-        console.log(csvrow);
+        sendMessage(csvrow[0], csvrow[1], csvrow[2], csvrow[3]);
       })
       .on('end', function(){
         console.log("Done parsing");
