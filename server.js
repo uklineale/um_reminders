@@ -16,15 +16,15 @@ app.use(bodyParser.urlencoded({extended : true}));
 
 // App config
 const uploadDir = 'uploads';
-console.log('Account SID: ' + config.twilioAccountSid);
-console.log('Auth Token:  ' + config.twilioAuthToken); 
 const twilioClient = new twilio.RestClient(config.twilioAccountSid,
   config.twilioAuthToken);
+
 function sendMessage(fname, lname, number, date){
+  //Parse date based on real data
   var options = {
     to: "+1" + number,
     from: config.twilioPhoneNumber,
-    body: "This is the first message you've sent from server"
+    body: "This is your sample appointment, " + fname+ " "+lname+": "+date
   }
 
   twilioClient.sendMessage(options, function(err, response){
@@ -65,6 +65,7 @@ app.post('/api/visits', function (req, res){
 
   // log any errorrs that occur
   form.on('error', function(err) {
+	console.log("Error in CSV Parsing");
     if (err) throw err;
   });
 
