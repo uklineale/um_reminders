@@ -39,7 +39,7 @@ function sendMessage(fname, lname, number, date){
 }
 
 app.post('/api/upload', function (req, res){
-
+  console.log("Starting upload");
   var form = new formidable.IncomingForm();
   form.uploadDir = path.join(__dirname, uploadDir);
 
