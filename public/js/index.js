@@ -5,10 +5,10 @@ angular.module('umr', [])
 	var serverUrl = "http://45.56.101.89:3000/api/";
 
     $scope.add = function(visit) {
-      $http.post(serverUrl+'visits', visit);
+      $http.post(serverUrl+'upload', visit);
     }
-    $scope.send = function(message) {
-      $http.post(serverUrl+'send', message);
+    $scope.update = function(message) {
+      $http.post(serverUrl+'updateMessage', message);
     }
     $scope.uploads = function() {
       $http.get(serverUrl+'uploads')

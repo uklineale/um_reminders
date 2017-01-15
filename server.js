@@ -6,7 +6,7 @@ var formidable = require('formidable');
 var parse = require('csv-parse');
 var config = require('./config');
 var twilio = require('twilio');
-
+var port = process.env.PORT || 3000;
 
 var app = express();
 // Node config
@@ -38,7 +38,7 @@ function sendMessage(fname, lname, number, date){
   });
 }
 
-app.post('/api/visits', function (req, res){
+app.post('/api/upload', function (req, res){
 
   var form = new formidable.IncomingForm();
   form.uploadDir = path.join(__dirname, uploadDir);
@@ -91,7 +91,7 @@ app.get('/api/uploads', function(req, res){
 
 
 
-app.post('/api/send', function (req, res){
+app.post('/api/updateMessage', function (req, res){
   var messageEng  = req.body.messageEng;
   var messageSpan = req.body.messageSpan;
 
@@ -100,6 +100,6 @@ app.post('/api/send', function (req, res){
   //Send twilio
 });
 
-app.listen(3000, function () {
-    console.log('Server running: port 3000');
+app.listen(port, function () {
+    console.log('Server running: port '+port);
 });
