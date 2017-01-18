@@ -14,7 +14,7 @@ var requiredConfig = [config.twilioAccountSid,
  });
 
  if (!isConfigured) {
- 	var error = 'TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, and TWILIO_NUMBER must be set.';
+ 	var error = 'TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, and TWILIO_PHONE_NUMBER must be set.';
 
  	throw new Error(error);
  }
