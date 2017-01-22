@@ -8,5 +8,9 @@ Request format is a json object like below:
      csv_string : "last_name,first_name,phone_number,appointment_date"
 }
 
-TODO: Make Twilio calls from mongo documents
-Show list of people getting called, allow for edits on page
+
+##Endpoints
+
+##Search terms glossary
+EXR: Excercise for readers - A question I have about coding -er, for the most part
+TODO: Standard thing to do, never ends eh
