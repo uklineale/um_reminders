@@ -1,9 +1,13 @@
 var constants = require('../constants');
 var config = require('../config');
+var twilio = require('twilio');
+var formidable = require('formidable');
+var parse = require('csv-parse');
+var fs = require('fs');
+var path = require('path');
 
-module.exports = function() {
 
-  const uploadDir = constants.uploadDir;
+module.exports = function(req, res){
 
   const twilioClient = new twilio.RestClient(config.twilioAccountSid,
   config.twilioAuthToken);
@@ -27,14 +31,16 @@ module.exports = function() {
     });
   }
 
-  console.log("Starting upload");
+  var uploadDir = constants.uploadDir;
+  console.log("Starting upload to "+ uploadDir);
+
   var form = new formidable.IncomingForm();
-  form.uploadDir = path.join(__dirname, uploadDir);
+  pathName = path.join(__dirname, uploadDir);
+  form.uploadDir = pathName;
 
   // every time a file has been uploaded successfully,
   // rename it to it's orignal name
   form.on('file', function(field, file) {
-    console.log("Filepath: "+file.path)
     var filepath = path.join(form.uploadDir, file.name);
     fs.rename(file.path, filepath);
 

@@ -1,3 +1,4 @@
-var constants = {};
-
-constants.uploadDir = 'uploads';
+module.exports = {
+  //Only used from the routes
+  uploadDir : "../uploads/"
+};

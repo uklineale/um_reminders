@@ -7,9 +7,6 @@ angular.module('umr', [])
     $scope.add = function(visit) {
       $http.post(serverUrl+'upload', visit);
     }
-    $scope.update = function(message) {
-      $http.post(serverUrl+'updateMessage', message);
-    }
     $scope.uploads = function() {
       $http.get(serverUrl+'uploads')
         .success(function(data, status){
@@ -17,9 +14,10 @@ angular.module('umr', [])
           console.log(data);
         })
         .error(function(data, status){
-          alert('Error in uploads() index.js');
+            console.log(data);
+            alert("error in uploads: index.js");
         });
     }
 
-    $scope.uploads()
+    $scope.uploads();
   }]);
