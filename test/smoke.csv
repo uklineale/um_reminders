@@ -1,2 +1,4 @@
-Patient, Spanish, 3365098391, Date_Placeholder
-Patient, English, 3365098391, Date
+Wo, Man, 3365098391, This is the full message
+Hugh, Man, 3365098391, This is the fuller message with a comma coming , now
+Bobby, Womack, 3365098391, "This is with a, comma, with quotes"
+James, Brown, 3365098391, "This is without a comma, but with quotes"

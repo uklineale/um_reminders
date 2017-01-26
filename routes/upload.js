@@ -12,12 +12,12 @@ module.exports = function(req, res){
   const twilioClient = new twilio.RestClient(config.twilioAccountSid,
   config.twilioAuthToken);
   //EFR: practices of passing global variables: require them?
-  var sendMessage = function (fname, lname, number, date){
+  var sendMessage = function (fname, lname, number, message){
     var options = {
       to: "+1" + number,
       from: config.twilioPhoneNumber,
       //read from messages
-      body: "This is your sample appointment, " + fname+ " "+lname+": "+date
+      body: message
     }
 
     twilioClient.sendMessage(options, function(err, response){
