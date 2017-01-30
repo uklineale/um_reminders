@@ -19,7 +19,7 @@ $('#upload-input').on('change', function(){
 
     //Make post request, update file upload front end
     $.ajax({
-      url: '/api/visits',
+      url: '/api/upload',
       type: 'POST',
       data: formData,
       processData: false,

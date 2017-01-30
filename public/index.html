@@ -18,7 +18,6 @@
                 <div class="panel-body">
                   <span class="glyphicon glyphicon-cloud-upload"></span>
                   <h2>File Uploader</h2>
-                  <h4>coligo.io</h4>
                   <div class="progress">
                     <div class="progress-bar" role="progressbar"></div>
                   </div>
@@ -35,13 +34,6 @@
         <ul>
           <li ng-repeat="visit in visits"> {{visit}} </li>
         </ul>
-      </div>
-      <div class="text-visits">
-        <form novalidate class="message-form">
-            Message (English): <input type="text" ng-model="msg.messageEng" /><br/>
-            Message (Spanish): <input type="text" ng-model="msg.messageSpan" /><br/>
-            <input type="submit" ng-click="send(msg)" value="Send Messages" />
-        </form>
       </div>
     </div>
 
