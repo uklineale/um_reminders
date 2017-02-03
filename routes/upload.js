@@ -12,7 +12,7 @@ module.exports = function(req, res){
   const twilioClient = new twilio.RestClient(config.twilioAccountSid,
   config.twilioAuthToken);
   //EFR: practices of passing global variables: require them?
-  var sendMessage = function (fname, lname, number, message){
+  var sendMessage = function (number, message){
     var options = {
       to: "+1" + number,
       from: config.twilioPhoneNumber,
@@ -47,7 +47,7 @@ module.exports = function(req, res){
     fs.createReadStream(filepath)
       .pipe(parse())
       .on('data', function(csvrow) {
-        sendMessage(csvrow[0], csvrow[1], csvrow[2], csvrow[3]);
+        sendMessage(csvrow[0], csvrow[1]);
       })
       .on('end', function(){
         console.log("Done parsing");
