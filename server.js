@@ -22,8 +22,6 @@ app.use(bodyParser.urlencoded({extended : true}));
 
 //Routes
 app.use('/api/upload',upload);
-app.use('/api/uploads',uploads);
-
 
 app.listen(port, function () {
     console.log('Server running: port '+port);
